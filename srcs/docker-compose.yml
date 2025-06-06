@@ -1,0 +1,175 @@
+version: "3.3"
+
+services:
+  nginx:
+    build:
+      context: ./requirements/nginx
+      dockerfile: Dockerfile
+    image: nginx
+    container_name: nginx
+    ports:
+      - "443:443"
+    volumes:
+      - wordpress_data:/var/www/wordpress:ro
+    networks:
+      - inception
+    restart: always
+    depends_on:
+      - wordpress
+      - portainer
+      - adminer
+
+  wordpress:
+    build:
+      context: ./requirements/wordpress
+      dockerfile: Dockerfile
+    image: wordpress
+    container_name: wordpress
+    environment:
+      - WORDPRESS_DB_HOST=${WORDPRESS_DB_HOST}
+      - WORDPRESS_DB_NAME=${WORDPRESS_DB_NAME}
+      - WORDPRESS_DB_USER=${WORDPRESS_DB_USER}
+      - WORDPRESS_TABLE_PREFIX=${WORDPRESS_TABLE_PREFIX}
+      - WORDPRESS_SITE_URL=${WORDPRESS_SITE_URL}
+      - WORDPRESS_SITE_TITLE=${WORDPRESS_SITE_TITLE}
+      - WORDPRESS_ADMIN_USER=${WORDPRESS_ADMIN_USER}
+      - WORDPRESS_ADMIN_EMAIL=${WORDPRESS_ADMIN_EMAIL}
+    secrets:
+      - mariadb_wp_password
+      - wordpress_admin_password
+      - ngaurama_password
+    volumes:
+      - wordpress_data:/var/www/wordpress
+    networks:
+      - inception
+    restart: always
+    depends_on:
+      - mariadb
+      - redis
+
+  mariadb:
+    build:
+      context: ./requirements/mariadb
+      dockerfile: Dockerfile
+    image: mariadb
+    container_name: mariadb
+    environment:
+      - WORDPRESS_DB_NAME=${WORDPRESS_DB_NAME}
+      - WORDPRESS_DB_USER=${WORDPRESS_DB_USER}
+    secrets:
+      - mariadb_root_password
+      - mariadb_wp_password
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    networks:
+      - inception
+    restart: always
+
+  #BONUS
+  redis:
+    build:
+      context: ./requirements/bonus/redis
+      dockerfile: Dockerfile
+    image: redis
+    container_name: redis
+    volumes:
+      - redis_data:/data
+    networks:
+      - inception
+    restart: always
+  
+  ftp:
+    build:
+      context: ./requirements/bonus/ftp
+      dockerfile: Dockerfile
+    image: ftp
+    container_name: ftp
+    volumes:
+      - wordpress_data:/var/www/wordpress
+    ports:
+      - "21:21"
+      - "21100-21110:21100-21110"
+    environment:
+      - FTP_USER=${FTP_USER}
+    secrets:
+      - FTP_PASSWORD
+    networks:
+      - inception
+    restart: always
+    depends_on:
+      - wordpress
+
+  adminer:
+    build:
+      context: ./requirements/bonus/adminer
+      dockerfile: Dockerfile
+    image: adminer
+    container_name: adminer
+    secrets:
+      - mariadb_root_password
+      - mariadb_wp_password
+    networks:
+      - inception
+    restart: always
+    depends_on:
+      - mariadb
+
+  portainer:
+    build:
+      context: ./requirements/bonus/portainer
+      dockerfile: Dockerfile
+    image: portainer
+    container_name: portainer
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    secrets:
+      - portainer_admin_password
+    networks:
+      - inception
+    restart: always
+
+secrets:
+  mariadb_root_password:
+    file: /home/ngaurama/secrets/mariadb_root_password
+  mariadb_wp_password:
+    file: /home/ngaurama/secrets/mariadb_wp_password
+  wordpress_admin_password:
+    file: /home/ngaurama/secrets/wordpress_admin_password
+  ngaurama_password:
+    file: /home/ngaurama/secrets/ngaurama_password
+  FTP_PASSWORD:
+    file: /home/ngaurama/secrets/ftp_password
+  portainer_admin_password:
+    file: /home/ngaurama/secrets/portainer_admin_password
+
+volumes:
+  wordpress_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/ngaurama/data/wordpress
+  mariadb_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/ngaurama/data/database
+  #BONUS
+  redis_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/ngaurama/data/redis
+  portainer_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/ngaurama/data/portainer
+
+networks:
+  inception:
+    driver: bridge
