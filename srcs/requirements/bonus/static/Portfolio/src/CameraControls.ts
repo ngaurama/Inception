@@ -1,13 +1,10 @@
 import { SceneManager } from './SceneManager';
-import { RotationAnimations } from './RotationAnimations';
 
 export class CameraControls {
     private sceneManager: SceneManager;
-    private rotationAnimations: RotationAnimations;
 
-    constructor(sceneManager: SceneManager, rotationAnimations: RotationAnimations) {
+    constructor(sceneManager: SceneManager) {
         this.sceneManager = sceneManager;
-        this.rotationAnimations = rotationAnimations;
     }
 
     setupControls(): void {
@@ -24,11 +21,7 @@ export class CameraControls {
         if (isZoomingOut && this.sceneManager.camera.radius >= this.sceneManager.maxZoomDistance) {
             return;
         }
-        const now = performance.now();
-        if (!this.sceneManager.isAligned && now - this.sceneManager.lastAnimationTime > 2000) {
-            this.rotationAnimations.animateToStraight();
-            return;
-        } else if (this.sceneManager.isAligned) {
+        if (this.sceneManager.isAligned) {
             const newRadius = Math.max(this.sceneManager.minZoomDistance, Math.min(this.sceneManager.maxZoomDistance, this.sceneManager.camera.radius + delta));
             this.sceneManager.camera.radius = newRadius;
         }

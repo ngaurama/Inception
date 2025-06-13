@@ -24,12 +24,22 @@ COPY Portfolio/ .
 
 RUN npm run build
 
+
 FROM alpine:3.18
 
-RUN apk add --no-cache rsync
+RUN apk add --no-cache nginx && \
+    mkdir -p /var/www/portfolio && \
+    mkdir -p /run/nginx && \
+    rm -rf /var/cache/apk/*
 
-WORKDIR /app
+COPY --from=builder /app/dist /var/www/portfolio
+COPY conf/nginx.conf /etc/nginx/http.d/default.conf
 
-COPY --from=builder /app/dist /app/dist
+RUN chown -R nginx:nginx /var/www/portfolio && \
+	chmod -R 755 /var/www/portfolio
 
-CMD ["rsync", "-av", "/app/dist/", "/var/www/portfolio"]
+EXPOSE 80
+
+
+
+CMD ["nginx", "-g", "daemon off;"]

@@ -11,6 +11,7 @@ services:
       - "443:443"
     volumes:
       - wordpress_data:/var/www/wordpress:ro
+      - static_data:/var/www/portfolio:ro
     networks:
       - inception
     restart: always
@@ -45,8 +46,8 @@ services:
       - inception
     restart: always
     depends_on:
-      - mariadb
       - redis
+      - mariadb
 
   mariadb:
     build:
@@ -138,7 +139,7 @@ services:
     container_name: static
     restart: always
     volumes:
-      - portfolio_data:/var/www/portfolio
+      - static_data:/var/www/portfolio
     networks:
       - inception
 
@@ -187,7 +188,7 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: /home/ngaurama/data/portfolio
+      device: /home/ngaurama/data/static
 
 networks:
   inception:

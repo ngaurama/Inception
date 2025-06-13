@@ -1,9 +1,8 @@
-import { Engine, Scene, Color4, HemisphericLight, ArcRotateCamera, Vector3, Mesh, Quaternion } from '@babylonjs/core';
+import { Engine, Scene, Color4, HemisphericLight, ArcRotateCamera, Vector3, Mesh } from '@babylonjs/core';
 import '@babylonjs/loaders';
 import './style.css';
 import { ComputerLoader } from './ComputerLoader';
 import { CameraControls } from './CameraControls';
-import { RotationAnimations } from './RotationAnimations';
 import { ScreenManager } from './ScreenManager';
 import { CustomLoadingScreen } from './CustomLoadingScreen';
 
@@ -22,7 +21,6 @@ export class SceneManager
     public lastAnimationTime: number = 0;
     public lastStraighteningTime: number = 0;
     public cameraControls: CameraControls;
-    public rotationAnimations: RotationAnimations;
     private screenManager: ScreenManager | null = null;
     private customLoadingScreen: CustomLoadingScreen;
 
@@ -44,8 +42,7 @@ export class SceneManager
             this.customLoadingScreen.updateProgress(100);
             document.getElementById('enterSite')?.classList.remove('hidden');
         });
-        this.rotationAnimations = new RotationAnimations(this);
-        this.cameraControls = new CameraControls(this, this.rotationAnimations);
+        this.cameraControls = new CameraControls(this);
         this.cameraControls.setupControls();
 
         const darkModeSwitch = document.getElementById('darkModeSwitch');
@@ -95,21 +92,7 @@ export class SceneManager
         if (this.computerMeshes.length === 0 || !this.camera) return;
         this.camera.setTarget(Vector3.Zero());
 
-        const now = performance.now();
-        if (!this.isAnimating && this.camera.radius === this.maxZoomDistance && now - this.lastStraighteningTime > 2000) {
-            this.isAligned = false;
-            this.computerMeshes.forEach((mesh) => {
-                if (mesh.rotationQuaternion) {
-                    this.currentYRotation += 0.0015;
-                    mesh.rotationQuaternion = Quaternion.RotationYawPitchRoll(this.currentYRotation, 0, this.currentYRotation); // Y-axis only
-                }
-            });
-        }
         if (this.screenManager)
             this.screenManager.update();
-    }
-    
-    public triggerStraightenAnimation(): void {
-        this.rotationAnimations.animateToStraight();
     }
 }

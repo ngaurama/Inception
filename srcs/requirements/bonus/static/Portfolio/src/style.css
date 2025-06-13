@@ -37,7 +37,7 @@
     var(--color-green) 100%
   );
   background-size: 200% 200%;
-  animation: flowGradient 30s ease-in-out infinite;
+  /*animation: flowGradient 30s ease-in-out infinite;*/
   filter: url(#noiseFilter);
 }
 
