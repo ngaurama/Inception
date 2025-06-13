@@ -6,7 +6,7 @@
 #    By: ngaurama <ngaurama@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/31 19:55:17 by ngaurama          #+#    #+#              #
-#    Updated: 2025/06/06 10:45:23 by ngaurama         ###   ########.fr        #
+#    Updated: 2025/06/13 18:01:21 by ngaurama         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ DATA_DIR = $(HOME)/data
 all: setup up
 
 setup:
-	@mkdir -p $(DATA_DIR)/wordpress $(DATA_DIR)/database $(DATA_DIR)/redis $(DATA_DIR)/portainer
+	@mkdir -p $(DATA_DIR)/wordpress $(DATA_DIR)/database $(DATA_DIR)/redis $(DATA_DIR)/portainer $(DATA_DIR)/static
 	@sudo chown -R $(USER):$(USER) $(DATA_DIR)
 	@chmod -R 755 $(DATA_DIR)
 
@@ -42,18 +42,6 @@ clean:
 
 re: clean all
 
-help:
-	@echo "Makefile commands:"
-	@echo "  make all      - Set up and start containers"
-	@echo "  make setup    - Create data directories and configure hosts"
-	@echo "  make up       - Build and start containers"
-	@echo "  make down     - Stop containers"
-	@echo "  make restart  - Restart containers"
-	@echo "  make logs     - Tail container logs"
-	@echo "  make clean    - Remove containers, volumes, networks, and data"
-	@echo "  make re       - Clean and restart"
-	@echo "  make help     - Show this help"
-
-.PHONY: all setup up down restart logs clean re help
+.PHONY: all setup up down restart logs clean re
 
 #openssl s_client -connect localhost:443 -tls1_2 to test TLS working or not on correct

@@ -1,0 +1,268 @@
+@import "tailwindcss";
+@plugin "@iconify/tailwind4";
+
+:root {
+  --color-start: #e6c051; /* Yellow */
+  --color-pink: #f0796f; /* Pink */
+  --color-purple: #cc62e9; /* Purple */
+  --color-blue: #4f95d3; /* Blue */
+  --color-green: #5dd18d; /* Green */
+  /* --noise-opacity: 0.15; */
+  --color-bg1: rgb(108, 0, 162);
+  --color-bg2: rgb(3, 13, 53);
+  --color1: 66, 119, 199; /* darkish blue */
+  --color2: 221, 74, 255; /* light purple */
+  --color3: 100, 220, 255; /* light blue */
+  --color4: 236,90, 90; /* red */
+  --color5: 255, 162, 70; /* orange */
+  --color6: 99, 230, 172; /* light green */
+  --circle-size: 60%;
+  /* --blending: overlay; */
+  --blending: hard-light;
+}
+
+@keyframes flowGradient {
+  0% { background-position: 0% 0%; }
+  50% { background-position: 100% 0%; }
+  100% { background-position: 0% 0%; }
+}
+
+.gradient-bg {
+  background: linear-gradient(
+    90deg,
+    var(--color-start) 0%,
+    var(--color-pink) 25%,
+    var(--color-purple) 50%,
+    var(--color-blue) 75%,
+    var(--color-green) 100%
+  );
+  background-size: 200% 200%;
+  animation: flowGradient 30s ease-in-out infinite;
+  filter: url(#noiseFilter);
+}
+
+.gradient-bg.dark-mode {
+  background: linear-gradient(40deg, var(--color-bg1), var(--color-bg2));
+  animation: none;
+}
+
+/* .gradient-bg 
+{
+  background: linear-gradient(40deg, var(--color-bg1), var(--color-bg2));
+} */
+
+.gradients-container
+{
+  position: relative;
+  filter: url(#goo) blur(10px);
+}
+
+@keyframes moveInCircle {
+  0% { transform: rotate(0deg); }
+  50% { transform: rotate(180deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes moveVertical {
+  0% { transform: translateY(-50%); }
+  50% { transform: translateY(50%); }
+  100% { transform: translateY(-50%); }
+}
+
+@keyframes moveHorizontal {
+  0% { transform: translateX(-50%) translateY(-10%); }
+  50% { transform: translateX(50%) translateY(10%); }
+  100% { transform: translateX(-50%) translateY(-10%); }
+}
+
+.g1 {
+  background: radial-gradient(circle at center, rgba(var(--color1), 0.8) 0, rgba(var(--color1), 0) 50%) no-repeat;
+  mix-blend-mode: var(--blending);
+  width: var(--circle-size);
+  height: var(--circle-size);
+  top: calc(50% - var(--circle-size) / 2);
+  left: calc(50% - var(--circle-size) / 2);
+  transform-origin: center center;
+  animation: moveVertical 30s ease infinite;
+  opacity: 1;
+}
+
+.g2 {
+  background: radial-gradient(circle at center, rgba(var(--color2), 0.8) 0, rgba(var(--color2), 0) 50%) no-repeat;
+  mix-blend-mode: var(--blending);
+  width: var(--circle-size);
+  height: var(--circle-size);
+  top: calc(50% - var(--circle-size) / 2);
+  left: calc(50% - var(--circle-size) / 2);
+  transform-origin: calc(50% - 400px);
+  animation: moveInCircle 20s reverse infinite;
+  opacity: 1;
+}
+
+.g3 {
+  background: radial-gradient(circle at center, rgba(var(--color3), 0.8) 0, rgba(var(--color3), 0) 50%) no-repeat;
+  mix-blend-mode: var(--blending);
+  width: var(--circle-size);
+  height: var(--circle-size);
+  top: calc(50% - var(--circle-size) / 2 + 200px);
+  left: calc(50% - var(--circle-size) / 2 - 500px);
+  transform-origin: calc(50% + 400px);
+  animation: moveInCircle 40s linear infinite;
+  opacity: 1;
+}
+
+.g4 {
+  background: radial-gradient(circle at center, rgba(var(--color4), 0.8) 0, rgba(var(--color4), 0) 50%) no-repeat;
+  mix-blend-mode: var(--blending);
+  width: var(--circle-size);
+  height: var(--circle-size);
+  top: calc(50% - var(--circle-size) / 2);
+  left: calc(50% - var(--circle-size) / 2);
+  transform-origin: calc(50% - 200px);
+  animation: moveHorizontal 40s ease infinite;
+  opacity: 1;
+}
+
+.g5 {
+  background: radial-gradient(circle at center, rgba(var(--color5), 0.8) 0, rgba(var(--color5), 0) 50%) no-repeat;
+  mix-blend-mode: var(--blending);
+  width: var(--circle-size);
+  height: var(--circle-size);
+  top: calc(50% - var(--circle-size) / 2);
+  left: calc(50% - var(--circle-size) / 2);
+  transform-origin: calc(50% - 800px) calc(50% + 200px);
+  animation: moveInCircle 20s ease infinite;
+  opacity: 1;
+}
+
+.g6 {
+  background: radial-gradient(circle at center, rgba(var(--color6), 0.8) 0, rgba(var(--color6), 0) 50%) no-repeat;
+  mix-blend-mode: var(--blending);
+  width: var(--circle-size);
+  height: var(--circle-size);
+  top: calc(50% - var(--circle-size) / 2);
+  left: calc(50% - var(--circle-size) / 2);
+  transform-origin: calc(50% + 400px);
+  animation: moveInCircle 20s ease infinite;
+  opacity: 1;
+}
+
+.loading #header,
+.loading #footer {
+  display: none;
+}
+
+.loaded #loadingScreen {
+  display: none;
+}
+
+.loaded #header,
+.loaded #footer {
+  display: block;
+}
+
+#loadingScreen {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+
+#progressBar {
+  transition: width 0.3s ease-in-out;
+}
+
+#enterSite {
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.toggle-container {
+  position: fixed;
+  bottom: 25px;
+  right: 30px;
+  transform: scale(0.25);
+  transform-origin: bottom right;
+  z-index: 10;
+}
+
+
+label{
+  width: 500px;
+  height: 200px;
+  position: relative;
+  display: block;
+  background: #ebebeb;
+  border-radius: 200px;
+  box-shadow: inset 0px 5px 15px rgba(0, 0, 0, 0.4), inset 0px -5px 15px rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+label::after{
+  content: "";
+  width: 180px;
+  height: 180px;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: linear-gradient(180deg, #ffcc89, #d8860b);
+  border-radius: 180px;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+}
+
+input{
+  width: 0;
+  height: 0;
+  visibility: hidden;
+}
+
+input:checked + label{
+  background: #242424;
+}
+
+input:checked + label::after{
+  left: 485px;
+  transform: translateX(-100%);
+  background: linear-gradient(180deg, #777, #3a3a3a);
+}
+
+label:hover::after{
+  width: 260px;
+}
+
+label svg{
+  position: absolute;
+  width: 100px;
+  height: 90px;
+  top: 55px;
+  z-index: 1;
+}
+
+label svg.sun{
+  left:45px;
+  fill: #fff;
+  transition: 0.3s;
+}
+
+label svg.moon{
+  left:355px;
+  fill: #7e7e7e;
+  transition: 0.3s;
+}
+
+input:checked + label svg.sun{
+  fill: #FFFFFF;
+}
+
+input:checked + label svg.moon{
+  fill: #FFFFFF;
+}
+
+/* BABYLON */
+canvas {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 9;
+}
+

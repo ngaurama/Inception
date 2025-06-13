@@ -1,0 +1,28 @@
+{
+  "name": "portfolio",
+  "private": true,
+  "version": "0.0.0",
+  "homepage": "https://ngaurama.github.io/Portfolio",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
+  },
+  "devDependencies": {
+    "@iconify/json": "^2.2.347",
+    "@iconify/tailwind4": "^1.0.6",
+    "gh-pages": "^6.3.0",
+    "sass-embedded": "^1.89.1",
+    "typescript": "~5.8.3",
+    "vite": "^6.3.5"
+  },
+  "dependencies": {
+    "@babylonjs/core": "^8.11.0",
+    "@babylonjs/loaders": "^8.11.0",
+    "@tailwindcss/vite": "^4.1.8",
+    "tailwindcss": "^4.1.8"
+  }
+}
